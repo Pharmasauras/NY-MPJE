@@ -29,32 +29,58 @@
 
   <main class="container">
     <h2>Ask the MPJE Bot</h2>
-    <div id="chatbox">
-      <textarea id="userInput" placeholder="Ask a question about NY pharmacy law..."></textarea>
-      <button onclick="sendMessage()">Send</button>
-      <pre id="chatResponse"></pre>
-    </div>
+   <div id="chatbox">
+  <div id="chatLog" style="max-height: 400px; overflow-y: auto; margin-bottom: 1rem;"></div>
+
+  <textarea id="userInput" placeholder="Ask a question about NY pharmacy law..."></textarea>
+  <div class="grid">
+    <button onclick="sendMessage()">Send</button>
+    <button class="secondary" onclick="clearChat()">Clear Chat</button>
+  </div>
+</div>
   </main>
 
   <footer class="container">
     <small><a href="#">Privacy Policy</a> • <a href="#">Contact Us</a></small>
   </footer>
 
-  <script>
-    async function sendMessage() {
-      const input = document.getElementById('userInput').value;
-      document.getElementById('chatResponse').innerText = 'Thinking...';
+<script>
+  async function sendMessage() {
+    const inputEl = document.getElementById('userInput');
+    const chatLog = document.getElementById('chatLog');
+    const message = inputEl.value.trim();
 
-      // NOTE: Replace this with your actual backend endpoint
-      const res = await fetch('https://807b7186-2747-453d-a269-39383d4b2ea9-00-c0al57g40k8l.picard.replit.dev/chat', {
+    if (!message) return;
+
+    chatLog.innerHTML += `<div style="text-align: right;"><span style="background: #d0f0ff; padding: 0.5rem 1rem; border-radius: 10px; display: inline-block; margin: 5px 0;">${message}</span></div>`;
+    inputEl.value = '';
+    chatLog.scrollTop = chatLog.scrollHeight;
+
+    chatLog.innerHTML += `<div id="thinking" style="color: gray; margin: 5px 0;">MPJE Bot is thinking...</div>`;
+    chatLog.scrollTop = chatLog.scrollHeight;
+
+    try {
+      const res = await fetch('https://your-replit-url/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input })
+        body: JSON.stringify({ message })
       });
 
       const data = await res.json();
-      document.getElementById('chatResponse').innerText = data.response || 'No response.';
+      document.getElementById('thinking').remove();
+
+      chatLog.innerHTML += `<div style="text-align: left;"><span style="background: #eee; padding: 0.5rem 1rem; border-radius: 10px; display: inline-block; margin: 5px 0;">${data.response}</span></div>`;
+      chatLog.scrollTop = chatLog.scrollHeight;
+    } catch (err) {
+      document.getElementById('thinking').remove();
+      chatLog.innerHTML += `<div style="text-align: left; color: red;">Error: Could not reach server.</div>`;
     }
-  </script>
+  }
+
+  function clearChat() {
+    document.getElementById('chatLog').innerHTML = '';
+    document.getElementById('userInput').value = '';
+  }
+</script>
 </body>
 </html>
