@@ -1,0 +1,18 @@
+<div id="chatbox">
+  <textarea id="userInput" placeholder="Ask me about NY pharmacy law..."></textarea>
+  <button onclick="sendMessage()">Send</button>
+  <div id="chatResponse"></div>
+</div>
+
+<script>
+  async function sendMessage() {
+    const input = document.getElementById('userInput').value;
+    const res = await fetch('https://your-backend-url.com/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: input })
+    });
+    const data = await res.json();
+    document.getElementById('chatResponse').innerText = data.response;
+  }
+</script>
