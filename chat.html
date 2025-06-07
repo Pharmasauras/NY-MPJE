@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat with MPJE Bot</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #chatbox {
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+    textarea {
+      width: 100%;
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="container-fluid">
+    <ul><li><strong>NYS MPJE Prep</strong></li></ul>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="test.html">Practice Test</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <h2>Ask the MPJE Bot</h2>
+    <div id="chatbox">
+      <textarea id="userInput" placeholder="Ask a question about NY pharmacy law..."></textarea>
+      <button onclick="sendMessage()">Send</button>
+      <pre id="chatResponse"></pre>
+    </div>
+  </main>
+
+  <footer class="container">
+    <small><a href="#">Privacy Policy</a> • <a href="#">Contact Us</a></small>
+  </footer>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('userInput').value;
+      document.getElementById('chatResponse').innerText = 'Thinking...';
+
+      // NOTE: Replace this with your actual backend endpoint
+      const res = await fetch('https://your-backend-url.com/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input })
+      });
+
+      const data = await res.json();
+      document.getElementById('chatResponse').innerText = data.response || 'No response.';
+    }
+  </script>
+</body>
+</html>
