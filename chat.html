@@ -99,12 +99,10 @@
       const message = inputEl.value.trim();
       if (!message) return;
 
-      // Show user's message
       chatLog.innerHTML += `<div class="user"><span class="bubble">${message}</span></div>`;
       inputEl.value = '';
       chatLog.scrollTop = chatLog.scrollHeight;
 
-      // Show thinking placeholder
       chatLog.innerHTML += `<div id="thinking" class="bot"><span class="bubble" style="color: gray;">MPJE Bot is thinking...</span></div>`;
       chatLog.scrollTop = chatLog.scrollHeight;
 
@@ -118,7 +116,6 @@
         const data = await res.json();
         document.getElementById('thinking').remove();
 
-        // Show bot's response
         chatLog.innerHTML += `<div class="bot"><span class="bubble">${data.response}</span></div>`;
         chatLog.scrollTop = chatLog.scrollHeight;
       } catch (err) {
